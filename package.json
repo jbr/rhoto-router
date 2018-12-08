@@ -1,0 +1,34 @@
+{
+  "name": "rhoto-router",
+  "version": "0.0.1",
+  "description": "a react router",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "repository": "github.com/jbr/rhoto-router",
+  "author": "jacob rothstein",
+  "license": "MIT",
+  "private": false,
+  "peerDependencies": {
+    "react": "^16.7.0-alpha.2"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c"
+  },
+  "dependencies": {
+    "path-to-regexp": "^2.4.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^6.1.0",
+    "prettier": "^1.14.3",
+    "rollup": "^0.67.4",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0"
+  }
+}
