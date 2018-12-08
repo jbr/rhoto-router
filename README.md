@@ -1,5 +1,5 @@
 # rhoto-router
-it's a react router
+it's a react router built with hooks. you must be using react 16.7 🎣
 
 
 Example usage:
