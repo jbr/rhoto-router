@@ -1,10 +1,10 @@
 import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import pkg from "./package.json";
-import babel from "rollup-plugin-babel";
+import typescript from "rollup-plugin-typescript2";
 import external from "rollup-plugin-peer-deps-external";
 export default {
-  input: "src/index.js",
+  input: "src/index.ts",
 
   output: [
     {
@@ -20,13 +20,14 @@ export default {
       sourcemap: true
     }
   ],
-  external: ["react", "path-to-regexp"],
+  external: ["react", "path-to-regexp", "qs"],
   plugins: [
-    babel({ runtimeHelpers: true, exclude: "node_modules/**" }),
+    typescript(),
     resolve({
       modulesOnly: true,
-      extensions: [".js", ".jsx", ".json"]
+      extensions: [".ts", ".js", ".jsx", ".json"]
     }),
-    commonjs()
+    commonjs({ extensions: [".js", ".ts"] }),
+    external()
   ]
 };

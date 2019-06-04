@@ -1,7 +1,11 @@
 import React from "react";
 import { useRouter } from "./Router";
 
-export const Redirect = ({ to }) => {
+interface RedirectProps {
+  to: string;
+}
+
+export const Redirect = ({ to }: RedirectProps): null => {
   const { navigate } = useRouter();
   React.useEffect(() => {
     navigate(to);

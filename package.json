@@ -1,34 +1,48 @@
 {
   "name": "rhoto-router",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a react router",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "repository": "github.com/jbr/rhoto-router",
+  "types": "dist/index.d.ts",
   "author": "jacob rothstein",
   "license": "MIT",
   "private": false,
   "peerDependencies": {
-    "react": "^16.7.0-alpha.2"
+    "react": "^16.8"
   },
   "scripts": {
-    "build": "NODE_ENV=production rollup -c"
+    "build": "env NODE_ENV=production rollup -c ./rollup.config.js",
+    "watch": "env NODE_ENV=development yarn rollup -c ./rollup.config.js --watch",
+    "clean": "rm -rf dist/*",
+    "build:clean": "yarn run clean && yarn run build",
+    "prepublishOnly": "yarn build:clean"
   },
   "dependencies": {
-    "path-to-regexp": "^2.4.0"
+    "@types/path-to-regexp": "^1.7.0",
+    "@types/qs": "^6.5.3",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "path-to-regexp": "^3.0.0",
+    "qs": "^6.7.0"
   },
   "files": [
     "dist"
   ],
   "devDependencies": {
-    "@babel/core": "^7.2.0",
     "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^6.1.0",
-    "prettier": "^1.14.3",
-    "rollup": "^0.67.4",
-    "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-peer-deps-external": "^2.2.0"
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-react": "^7.13.0",
+    "fsevents": "^2.0.7",
+    "prettier": "^1.17.0",
+    "rollup": "^1.11.3",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "tslib": "^1.9.3",
+    "typescript": "^3.5.1"
   }
 }
