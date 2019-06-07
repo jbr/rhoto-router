@@ -43,12 +43,30 @@ export const useRoute = (argument?: string | UseRouteOptions) => {
 
   const params = { ...routeParams, ...route.query };
 
+  const navigateParams = React.useCallback(
+    (newParams: { [index: string]: string }): void => {
+      const reverse = pathToRegexp.compile(fullMatchedRoute);
+
+      const newQuery = Object.keys(newParams).reduce(
+        (queries, key) =>
+          routeParams.hasOwnProperty(key)
+            ? queries
+            : { ...queries, [key]: newParams[key] },
+        route.query
+      );
+
+      route.navigate(reverse({ ...routeParams, ...newParams }), newQuery);
+    },
+    [fullMatchedRoute, routeParams, route.query, route.navigate]
+  );
+
   const contextValue = {
     ...route,
     matches: allMatches,
     routeParams,
     params,
     fullMatchedRoute,
+    navigateParams,
     unmatched: route.unmatched.slice(matches[0].length) || "/"
   };
 

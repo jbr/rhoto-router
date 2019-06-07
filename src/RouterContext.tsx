@@ -14,6 +14,7 @@ export interface RouterContextValue {
   unmatched: string;
   update?: Function;
   navigate?: Function;
+  navigateParams?: Function;
   routeParams: object;
   params: object;
 }
