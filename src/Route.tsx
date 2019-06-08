@@ -1,6 +1,6 @@
 import pathToRegexp from "path-to-regexp";
 import React from "react";
-import RouterContext from "./RouterContext";
+import RouterContext, { RouterContextValue } from "./RouterContext";
 import { useRouter } from "./Router";
 
 interface UseRouteOptions {
@@ -9,7 +9,9 @@ interface UseRouteOptions {
   notMatching?: boolean;
 }
 
-export const useRoute = (argument?: string | UseRouteOptions) => {
+export const useRoute = (
+  argument?: string | UseRouteOptions
+): RouterContextValue | null => {
   const options: UseRouteOptions =
     typeof argument === "string" ? { path: argument } : argument;
   const { path, exact, notMatching } = options;
@@ -22,15 +24,9 @@ export const useRoute = (argument?: string | UseRouteOptions) => {
   const route = useRouter();
   const matches = regexp.exec(route.unmatched);
 
-  if (!matches) {
-    return notMatching ? route : null;
-  } else if (matches && notMatching) {
-    return null;
-  }
-
   const namedMatches = matches
-    .slice(1)
-    .map((m, i) => ({ key: keys[i], match: m }));
+    ? matches.slice(1).map((m, i) => ({ key: keys[i], match: m }))
+    : [];
 
   const fullMatchedRoute = [route.fullMatchedRoute, path].join("");
 
@@ -60,17 +56,21 @@ export const useRoute = (argument?: string | UseRouteOptions) => {
     [fullMatchedRoute, routeParams, route.query, route.navigate]
   );
 
-  const contextValue = {
-    ...route,
-    matches: allMatches,
-    routeParams,
-    params,
-    fullMatchedRoute,
-    navigateParams,
-    unmatched: route.unmatched.slice(matches[0].length) || "/"
-  };
-
-  return contextValue;
+  if (!matches) {
+    return notMatching ? route : null;
+  } else if (matches && notMatching) {
+    return null;
+  } else {
+    return {
+      ...route,
+      matches: allMatches,
+      routeParams,
+      params,
+      fullMatchedRoute,
+      navigateParams,
+      unmatched: route.unmatched.slice(matches[0].length) || "/"
+    };
+  }
 };
 
 interface RouteOptions {
