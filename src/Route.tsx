@@ -2,6 +2,7 @@ import pathToRegexp from "path-to-regexp";
 import React from "react";
 import RouterContext, { RouterContextValue } from "./RouterContext";
 import { useRouter } from "./Router";
+import { JSXChildren, JSXChildrenFunction } from "./types";
 
 interface UseRouteOptions {
   path: string;
@@ -77,7 +78,7 @@ interface RouteOptions {
   path: string;
   exact?: boolean;
   notMatching?: boolean;
-  children: (params: object) => JSX.Element | JSX.Element;
+  children: JSXChildren | JSXChildrenFunction;
 }
 
 export const Route = ({ path, exact, notMatching, children }: RouteOptions) => {

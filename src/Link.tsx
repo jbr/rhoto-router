@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "./Router";
+import { JSXChildren, JSXChildrenFunction } from "./types";
 
 const join = (base: string, part: string) =>
   `${base}/${part.replace(/^\//, "")}`;
@@ -13,11 +14,9 @@ const relativeHref = (base: string, relative: string): string => {
   } else return relative;
 };
 
-export type ChildrenFunction = (options: any) => JSX.Element;
-
 export interface LinkProps {
   href: string;
-  children: JSX.Element | ChildrenFunction;
+  children: JSXChildren | JSXChildrenFunction;
   currentClassName?: string;
   className?: string;
   exact?: boolean;
@@ -36,6 +35,7 @@ export const Link = ({
 }: LinkProps) => {
   const { navigate, fullPath } = useRouter();
   const url = relativeHref(fullPath, href);
+
   const linkClick = React.useCallback(
     evt => {
       if (onClick) onClick(evt);
@@ -44,6 +44,7 @@ export const Link = ({
     },
     [navigate, onClick]
   );
+
   const isCurrent = exact ? fullPath === url : fullPath.startsWith(url);
 
   if (typeof children === "function") {

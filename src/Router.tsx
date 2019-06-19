@@ -1,8 +1,9 @@
 import React from "react";
 import { RouterContextValue, RouterContext } from "./RouterContext";
+import { JSXChildren } from "./types";
 import qs from "qs";
 interface RouterProps {
-  children: JSX.Element;
+  children: JSXChildren;
 }
 
 export const Router = ({ children }: RouterProps) => {
