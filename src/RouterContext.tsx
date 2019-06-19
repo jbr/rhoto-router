@@ -13,7 +13,7 @@ export interface RouterContextValue {
   matches: Match[];
   unmatched: string;
   update?: Function;
-  navigate?: Function;
+  navigate: Function;
   navigateParams?: Function;
   routeParams: object;
   params: object;
@@ -25,7 +25,10 @@ export const RouterContext = React.createContext<RouterContextValue>({
   matches: [],
   params: {},
   routeParams: {},
-  unmatched: ""
+  unmatched: "",
+  navigate(url: string) {
+    window.location.href = url;
+  }
 });
 
 export default RouterContext;
