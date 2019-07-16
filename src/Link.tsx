@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "./Router";
-import { JSXChildren, JSXChildrenFunction } from "./types";
 
 const join = (base: string, part: string) =>
   `${base}/${part.replace(/^\//, "")}`;
@@ -14,13 +13,19 @@ const relativeHref = (base: string, relative: string): string => {
   } else return relative;
 };
 
+type LinkChildFunction = (args: {
+  onClick: React.MouseEventHandler;
+  current: boolean;
+  url: string;
+}) => React.ReactNode;
+
 export interface LinkProps {
   href: string;
-  children: JSXChildren | JSXChildrenFunction;
+  children: React.ReactNode | LinkChildFunction;
   currentClassName?: string;
   className?: string;
   exact?: boolean;
-  onClick: Function;
+  onClick?: React.MouseEventHandler;
   [index: string]: any;
 }
 
@@ -36,13 +41,13 @@ export const Link = ({
   const { navigate, fullPath } = useRouter();
   const url = relativeHref(fullPath, href);
 
-  const linkClick = React.useCallback(
+  const linkClick: React.MouseEventHandler = React.useCallback(
     evt => {
       if (onClick) onClick(evt);
       evt.preventDefault();
       navigate(url);
     },
-    [navigate, onClick]
+    [navigate, onClick, url]
   );
 
   const isCurrent = exact ? fullPath === url : fullPath.startsWith(url);

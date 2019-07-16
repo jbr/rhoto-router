@@ -1,2 +1,3 @@
-export type JSXChildrenFunction = (obj: object) => JSXChildren;
-export type JSXChildren = JSX.Element | JSX.Element[];
+import React from "react";
+export type JSXChildrenFunction = (obj: object) => React.ReactNode;
+export type JSXChildren = React.ReactNode;
