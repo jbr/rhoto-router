@@ -7,16 +7,16 @@ interface Match {
 }
 
 export interface RouterContextValue {
-  query: object;
+  query: { [index: string]: string };
   fullPath: string;
   fullMatchedRoute?: string;
   matches: Match[];
   unmatched: string;
-  update: Function;
-  navigate: Function;
-  navigateParams: Function;
-  routeParams: object;
-  params: object;
+  update(): void;
+  navigate(path: string, query?: unknown): void;
+  navigateParams(newParams: { [index: string]: string }): void;
+  routeParams: { [index: string]: string };
+  params: { [index: string]: string };
 }
 
 export const RouterContext = React.createContext<RouterContextValue>({
