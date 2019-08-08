@@ -1,13 +1,12 @@
 import pathToRegexp from "path-to-regexp";
 import React from "react";
 import RouterContext, { RouterContextValue } from "./RouterContext";
-import { useRouter } from "./Router";
+import { useRouter, useSubrouteReducer } from "./Router";
 import { JSXChildren, JSXChildrenFunction } from "./types";
 
 interface UseRouteOptions {
   path: string;
   exact?: boolean;
-  notMatching?: boolean;
 }
 
 export const useRoute = (
@@ -15,7 +14,7 @@ export const useRoute = (
 ): RouterContextValue | null => {
   const options: UseRouteOptions =
     typeof argument === "string" ? { path: argument } : argument;
-  const { path, exact, notMatching } = options;
+  const { path, exact } = options;
 
   const [keys, regexp] = React.useMemo(() => {
     let keys: pathToRegexp.Key[] = [];
@@ -57,13 +56,27 @@ export const useRoute = (
     [fullMatchedRoute, routeParams, route.query, route.navigate]
   );
 
-  if (!matches) {
-    return notMatching ? route : null;
-  } else if (matches && notMatching) {
-    return null;
-  } else {
+  const [notFound, setNotFound] = React.useState<boolean>(false);
+
+  const [subroutes, setSubroutes] = useSubrouteReducer({
+    route: path,
+    subroutes: [],
+    matched: !!matches,
+    notFound: false
+  });
+
+  React.useEffect(() => {
+    route.setSubroutes({ ...subroutes, notFound });
+  }, [path, subroutes, notFound]);
+
+  if (route.subroutes.matched !== false && matches) {
     return {
       ...route,
+      notFound() {
+        setNotFound(true);
+      },
+      subroutes,
+      setSubroutes,
       matches: allMatches,
       routeParams,
       params,
@@ -71,6 +84,8 @@ export const useRoute = (
       navigateParams,
       unmatched: route.unmatched.slice(matches[0].length) || "/"
     };
+  } else {
+    return null;
   }
 };
 
@@ -81,8 +96,8 @@ interface RouteOptions {
   children: JSXChildren | JSXChildrenFunction;
 }
 
-export const Route = ({ path, exact, notMatching, children }: RouteOptions) => {
-  const route = useRoute({ path, exact, notMatching });
+export const Route = ({ path, exact, children }: RouteOptions) => {
+  const route = useRoute({ path, exact });
 
   if (route) {
     return (

@@ -17,6 +17,16 @@ export interface RouterContextValue {
   navigateParams(newParams: { [index: string]: string }): void;
   routeParams: { [index: string]: string };
   params: { [index: string]: string };
+  subroutes: SubrouteData;
+  setSubroutes(sd: SubrouteData): void;
+  notFound(): void;
+}
+
+export interface SubrouteData {
+  subroutes: SubrouteData[];
+  matched: boolean | null;
+  route: string;
+  notFound: boolean;
 }
 
 export const RouterContext = React.createContext<RouterContextValue>({
@@ -30,7 +40,15 @@ export const RouterContext = React.createContext<RouterContextValue>({
     window.location.href = url;
   },
   navigateParams() { },
-  update() { }
+  update() { },
+  subroutes: {
+    route: "ROOT",
+    subroutes: [],
+    matched: null,
+    notFound: false
+  },
+  notFound() { },
+  setSubroutes() { }
 });
 
 export default RouterContext;

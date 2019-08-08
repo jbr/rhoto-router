@@ -1,8 +1,41 @@
 import React from "react";
-import { RouterContextValue, RouterContext } from "./RouterContext";
+import {
+  RouterContextValue,
+  RouterContext,
+  SubrouteData
+} from "./RouterContext";
 import qs from "qs";
 
-export const useRouter = () => React.useContext(RouterContext);
+export function subrouteReducer(
+  state: SubrouteData,
+  action: SubrouteData
+): SubrouteData {
+  let newState: SubrouteData;
+  const existing = state.subroutes.find(sr => sr.route === action.route);
+  if (existing) {
+    newState = {
+      ...state,
+      subroutes: state.subroutes.map(sr =>
+        sr.route === action.route ? action : sr
+      )
+    };
+  } else {
+    newState = { ...state, subroutes: [...state.subroutes, action] };
+  }
+
+  newState.matched =
+    (newState.subroutes.length === 0 && newState.matched) ||
+    !!newState.subroutes.find(sr => sr.matched);
+  return newState;
+}
+
+export function useSubrouteReducer(defaultState: SubrouteData) {
+  return React.useReducer(subrouteReducer, defaultState);
+}
+
+export function useRouter(): RouterContextValue {
+  return React.useContext(RouterContext);
+}
 
 export const Router = ({ children }: { children: React.ReactNode }) => {
   const [href, setHref] = React.useState(window.location.href);
@@ -47,6 +80,8 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
 
   const defaultState = useRouter();
 
+  const [subroutes, setSubroutes] = useSubrouteReducer(defaultState.subroutes);
+
   const initialState: RouterContextValue = {
     ...defaultState,
     query: window.location.search
@@ -55,7 +90,9 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
     fullPath: pathname,
     update,
     navigate,
-    unmatched: pathname
+    unmatched: pathname,
+    subroutes,
+    setSubroutes
   };
 
   return (
