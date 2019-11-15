@@ -2,7 +2,8 @@ import React from "react";
 import {
   RouterContextValue,
   RouterContext,
-  SubrouteData
+  SubrouteData,
+  NavigateOptions
 } from "./RouterContext";
 import qs from "qs";
 
@@ -38,7 +39,7 @@ export function useRouter(): RouterContextValue {
 }
 
 export const Router = ({ children }: { children: React.ReactNode }) => {
-  const [href, setHref] = React.useState(window.location.href);
+  const [, setHref] = React.useState(window.location.href);
 
   const update = React.useCallback(() => setHref(window.location.href), [
     window.location.href
@@ -59,7 +60,7 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
       update();
     };
 
-    window.onpopstate = function(event) {
+    window.onpopstate = function(event: PopStateEvent) {
       if (onpopstatebefore) onpopstatebefore.call(this, event);
       update();
     };
@@ -70,13 +71,21 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const navigate = React.useCallback((path, query) => {
-    const stringifiedQuery = query ? qs.stringify(query) : null;
-    const pathWithQuery = stringifiedQuery
-      ? [path, stringifiedQuery].join("?")
-      : path;
-    window.history.pushState({}, "", pathWithQuery);
-  }, []);
+  const navigate = React.useCallback(
+    (path, query, options: NavigateOptions) => {
+      const stringifiedQuery = query ? qs.stringify(query) : null;
+      const pathWithQuery = stringifiedQuery
+        ? [path, stringifiedQuery].join("?")
+        : path;
+
+      if (options?.replace) {
+        window.history.replaceState({}, "", pathWithQuery);
+      } else {
+        window.history.pushState({}, "", pathWithQuery);
+      }
+    },
+    []
+  );
 
   const defaultState = useRouter();
 

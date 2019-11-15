@@ -1,4 +1,4 @@
-import pathToRegexp from "path-to-regexp";
+import { pathToRegexp, compile, Key } from "path-to-regexp";
 import React from "react";
 import RouterContext, { RouterContextValue } from "./RouterContext";
 import { useRouter, useSubrouteReducer } from "./Router";
@@ -17,7 +17,7 @@ export const useRoute = (
   const { path, exact } = options;
 
   const [keys, regexp] = React.useMemo(() => {
-    let keys: pathToRegexp.Key[] = [];
+    let keys: Key[] = [];
     return [keys, pathToRegexp(path, keys, { end: !!exact })];
   }, [path, exact]);
 
@@ -41,7 +41,7 @@ export const useRoute = (
 
   const navigateParams = React.useCallback(
     (newParams: { [index: string]: string }): void => {
-      const reverse = pathToRegexp.compile(fullMatchedRoute);
+      const reverse = compile(fullMatchedRoute);
 
       const newQuery = Object.keys(newParams).reduce(
         (queries, key) =>

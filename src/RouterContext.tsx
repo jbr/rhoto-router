@@ -6,6 +6,10 @@ interface Match {
   match: string;
 }
 
+export interface NavigateOptions {
+  replace: boolean;
+}
+
 export interface RouterContextValue {
   query: { [index: string]: string };
   fullPath: string;
@@ -13,7 +17,7 @@ export interface RouterContextValue {
   matches: Match[];
   unmatched: string;
   update(): void;
-  navigate(path: string, query?: unknown): void;
+  navigate(path: string, query?: unknown, options?: NavigateOptions): void;
   navigateParams(newParams: { [index: string]: string }): void;
   routeParams: { [index: string]: string };
   params: { [index: string]: string };
@@ -39,16 +43,16 @@ export const RouterContext = React.createContext<RouterContextValue>({
   navigate(url: string) {
     window.location.href = url;
   },
-  navigateParams() { },
-  update() { },
+  navigateParams() {},
+  update() {},
   subroutes: {
     route: "ROOT",
     subroutes: [],
     matched: null,
     notFound: false
   },
-  notFound() { },
-  setSubroutes() { }
+  notFound() {},
+  setSubroutes() {}
 });
 
 export default RouterContext;

@@ -8,7 +8,7 @@ interface RedirectProps {
 export const Redirect = ({ to }: RedirectProps): null => {
   const { navigate } = useRouter();
   React.useEffect(() => {
-    navigate(to);
+    navigate(to, undefined, { replace: true });
   });
   return null;
 };
