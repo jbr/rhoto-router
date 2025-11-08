@@ -17,8 +17,8 @@ export const useRoute = (
   const { path, exact } = options;
 
   const [keys, regexp] = React.useMemo(() => {
-    let keys: Key[] = [];
-    return [keys, pathToRegexp(path, keys, { end: !!exact })];
+    const { regexp, keys } = pathToRegexp(path, { end: !!exact });
+    return [keys, regexp];
   }, [path, exact]);
 
   const route = useRouter();
