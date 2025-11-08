@@ -72,7 +72,7 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const navigate = React.useCallback(
-    (path, query, options: NavigateOptions) => {
+    (path: string, query?: unknown, options?: NavigateOptions) => {
       const stringifiedQuery = query ? qs.stringify(query) : null;
       const pathWithQuery = stringifiedQuery
         ? [path, stringifiedQuery].join("?")

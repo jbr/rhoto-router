@@ -12,7 +12,9 @@
     "target": "es5",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "importHelpers": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
