@@ -10,7 +10,7 @@ interface UseRouteOptions {
 }
 
 export const useRoute = (
-  argument?: string | UseRouteOptions
+  argument?: string | UseRouteOptions,
 ): RouterContextValue | null => {
   const options: UseRouteOptions =
     typeof argument === "string" ? { path: argument } : argument;
@@ -34,7 +34,7 @@ export const useRoute = (
 
   const routeParams = allMatches.reduce(
     (o, { key, match }) => (key && key.name ? { ...o, [key.name]: match } : o),
-    {}
+    {},
   );
 
   const params = { ...routeParams, ...route.query };
@@ -48,12 +48,12 @@ export const useRoute = (
           routeParams.hasOwnProperty(key)
             ? queries
             : { ...queries, [key]: newParams[key] },
-        route.query
+        route.query,
       );
 
       route.navigate(reverse({ ...routeParams, ...newParams }), newQuery);
     },
-    [fullMatchedRoute, routeParams, route.query, route.navigate]
+    [fullMatchedRoute, routeParams, route.query, route.navigate],
   );
 
   const [notFound, setNotFound] = React.useState<boolean>(false);
@@ -62,12 +62,12 @@ export const useRoute = (
     route: path,
     subroutes: [],
     matched: !!matches,
-    notFound: false
+    notFound: false,
   });
 
   React.useEffect(() => {
     route.setSubroutes({ ...subroutes, notFound });
-  }, [path, subroutes, notFound]);
+  }, [path, subroutes, notFound, route.setSubroutes]);
 
   if (route.subroutes.matched !== false && matches) {
     return {
@@ -82,7 +82,7 @@ export const useRoute = (
       params,
       fullMatchedRoute,
       navigateParams,
-      unmatched: route.unmatched.slice(matches[0].length) || "/"
+      unmatched: route.unmatched.slice(matches[0].length) || "/",
     };
   } else {
     return null;

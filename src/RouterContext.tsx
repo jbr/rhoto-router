@@ -1,5 +1,6 @@
 import { Key } from "path-to-regexp";
 import React from "react";
+import { ParsedQs } from "qs";
 
 interface Match {
   key: Key;
@@ -11,7 +12,7 @@ export interface NavigateOptions {
 }
 
 export interface RouterContextValue {
-  query: { [index: string]: string };
+  query: ParsedQs;
   fullPath: string;
   fullMatchedRoute?: string;
   matches: Match[];
@@ -49,10 +50,10 @@ export const RouterContext = React.createContext<RouterContextValue>({
     route: "ROOT",
     subroutes: [],
     matched: null,
-    notFound: false
+    notFound: false,
   },
   notFound() {},
-  setSubroutes() {}
+  setSubroutes() {},
 });
 
 export default RouterContext;

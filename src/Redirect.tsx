@@ -9,7 +9,7 @@ export const Redirect = ({ to }: RedirectProps): null => {
   const { navigate } = useRouter();
   React.useEffect(() => {
     navigate(to, undefined, { replace: true });
-  });
+  }, [navigate, to]);
   return null;
 };
 

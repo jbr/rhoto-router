@@ -42,12 +42,12 @@ export const Link = ({
   const url = relativeHref(fullPath, href);
 
   const linkClick: React.MouseEventHandler = React.useCallback(
-    evt => {
+    (evt) => {
       if (onClick) onClick(evt);
       evt.preventDefault();
       navigate(url);
     },
-    [navigate, onClick, url]
+    [navigate, onClick, url],
   );
 
   const isCurrent = exact ? fullPath === url : fullPath.startsWith(url);

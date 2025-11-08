@@ -3,22 +3,22 @@ import {
   RouterContextValue,
   RouterContext,
   SubrouteData,
-  NavigateOptions
+  NavigateOptions,
 } from "./RouterContext";
 import qs from "qs";
 
 export function subrouteReducer(
   state: SubrouteData,
-  action: SubrouteData
+  action: SubrouteData,
 ): SubrouteData {
   let newState: SubrouteData;
-  const existing = state.subroutes.find(sr => sr.route === action.route);
+  const existing = state.subroutes.find((sr) => sr.route === action.route);
   if (existing) {
     newState = {
       ...state,
-      subroutes: state.subroutes.map(sr =>
-        sr.route === action.route ? action : sr
-      )
+      subroutes: state.subroutes.map((sr) =>
+        sr.route === action.route ? action : sr,
+      ),
     };
   } else {
     newState = { ...state, subroutes: [...state.subroutes, action] };
@@ -26,7 +26,7 @@ export function subrouteReducer(
 
   newState.matched =
     (newState.subroutes.length === 0 && newState.matched) ||
-    !!newState.subroutes.find(sr => sr.matched);
+    !!newState.subroutes.find((sr) => sr.matched);
   return newState;
 }
 
@@ -41,9 +41,7 @@ export function useRouter(): RouterContextValue {
 export const Router = ({ children }: { children: React.ReactNode }) => {
   const [, setHref] = React.useState(window.location.href);
 
-  const update = React.useCallback(() => setHref(window.location.href), [
-    window.location.href
-  ]);
+  const update = React.useCallback(() => setHref(window.location.href), []);
 
   const { pathname } = window.location;
 
@@ -51,16 +49,16 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
     const onpopstatebefore = window.onpopstate;
     const pushStateBefore = window.history.pushState;
 
-    window.history.pushState = function(
+    window.history.pushState = function (
       data: any,
       title: string,
-      url?: string
+      url?: string,
     ) {
       pushStateBefore.call(this, data, title, url);
       update();
     };
 
-    window.onpopstate = function(event: PopStateEvent) {
+    window.onpopstate = function (event: PopStateEvent) {
       if (onpopstatebefore) onpopstatebefore.call(this, event);
       update();
     };
@@ -84,7 +82,7 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
         window.history.pushState({}, "", pathWithQuery);
       }
     },
-    []
+    [],
   );
 
   const defaultState = useRouter();
@@ -101,7 +99,7 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
     navigate,
     unmatched: pathname,
     subroutes,
-    setSubroutes
+    setSubroutes,
   };
 
   return (
