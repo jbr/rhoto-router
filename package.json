@@ -2,10 +2,18 @@
   "name": "rhoto-router",
   "version": "0.3.0",
   "description": "a react router",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.es.js",
   "repository": "github.com/jbr/rhoto-router",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
   "author": "jacob rothstein",
   "license": "MIT",
   "private": false,
