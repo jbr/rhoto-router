@@ -38,7 +38,24 @@ export function useRouter(): RouterContextValue {
   return React.useContext(RouterContext);
 }
 
-export const Router = ({ children }: { children: React.ReactNode }) => {
+export interface RouterProps {
+  children: React.ReactNode;
+  /**
+   * Scroll to the top of the page when a `navigate` changes the pathname.
+   *
+   * Opt-in because the router serves two distinct usages. An app that treats
+   * the url as a state store — where `navigateParams` records an interaction
+   * that isn't really navigation, so it's reachable by back/forward and by
+   * link — wants the viewport left alone. An app doing page-wise navigation
+   * wants it to feel like a browser navigation, which starts at the top.
+   *
+   * Only pathname changes scroll, so the two usages coexist in one app: a
+   * query-only `navigateParams` holds position even with this enabled.
+   */
+  scrollToTop?: boolean;
+}
+
+export const Router = ({ children, scrollToTop = false }: RouterProps) => {
   const [, setHref] = React.useState(window.location.href);
 
   const update = React.useCallback(() => setHref(window.location.href), []);
@@ -79,10 +96,19 @@ export const Router = ({ children }: { children: React.ReactNode }) => {
       if (options?.replace) {
         window.history.replaceState({}, "", pathWithQuery);
       } else {
+        // Read the outgoing pathname before pushState overwrites it. A
+        // `replace` is a correction to the current url rather than a move to a
+        // new page, so it never scrolls.
+        const changedPath =
+          new URL(pathWithQuery, window.location.href).pathname !==
+          window.location.pathname;
+
         window.history.pushState({}, "", pathWithQuery);
+
+        if (scrollToTop && changedPath) window.scrollTo(0, 0);
       }
     },
-    [],
+    [scrollToTop],
   );
 
   const defaultState = useRouter();
