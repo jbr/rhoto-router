@@ -1,6 +1,6 @@
 import { Key } from "path-to-regexp";
 import React from "react";
-import { ParsedQs } from "qs";
+import { ParsedQs } from "qs-esm";
 
 interface Match {
   key: Key;

@@ -5,7 +5,7 @@ import {
   SubrouteData,
   NavigateOptions,
 } from "./RouterContext";
-import qs from "qs";
+import { parse, stringify } from "qs-esm";
 
 export function subrouteReducer(
   state: SubrouteData,
@@ -88,7 +88,7 @@ export const Router = ({ children, scrollToTop = false }: RouterProps) => {
 
   const navigate = React.useCallback(
     (path: string, query?: unknown, options?: NavigateOptions) => {
-      const stringifiedQuery = query ? qs.stringify(query) : null;
+      const stringifiedQuery = query ? stringify(query) : null;
       const pathWithQuery = stringifiedQuery
         ? [path, stringifiedQuery].join("?")
         : path;
@@ -118,7 +118,7 @@ export const Router = ({ children, scrollToTop = false }: RouterProps) => {
   const initialState: RouterContextValue = {
     ...defaultState,
     query: window.location.search
-      ? qs.parse(window.location.search.slice(1))
+      ? parse(window.location.search.slice(1))
       : {},
     fullPath: pathname,
     update,
